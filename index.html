@@ -5,29 +5,37 @@
 <title>PRUMO — Obadias 303</title>
 <style>
   :root{
+    /* Página externa clara — o frame escuro "flutua" sobre ela, como uma peça
+       apresentada sobre uma mesa clara. Referência visual trazida do último
+       input, mantendo a paleta dourada já validada e sincronizada com o site
+       de equipamentos (não trocamos o tom de dourado — só a moldura). */
+    --bg-page:#ddd5c6;
     --bg-app:#141210;
     --bg-surface:#1c1815;
     --bg-card:#221e1a;
     --bg-card-hover:#2a251f;
     --border-subtle:#332e27;
+    --border-hairline:rgba(255,255,255,.07);
+    --border-accent:rgba(201,168,118,.35);
     --accent-gold:#c9a876;
-    --accent-gold-soft:#3a3226;
     --text-primary:#f2ede4;
     --text-secondary:#a69c8d;
     --text-muted:#6e6559;
     --success:#8a9a73;
     --warning:#d6b44a;
     --danger:#c25b4a;
-    --radius-frame:24px;
-    --radius-card:16px;
-    --radius-sm:10px;
+    --radius-frame:28px;
+    --radius-card:18px;
+    --radius-sm:12px;
     --shadow:0 8px 24px rgba(0,0,0,.35);
+    --shadow-app:0 30px 70px rgba(33,24,14,.28);
+    --sheen:linear-gradient(145deg, rgba(255,255,255,.045), rgba(255,255,255,.012));
   }
   *{box-sizing:border-box;}
   body{
     margin:0;
     font-family:'Segoe UI',Inter,system-ui,-apple-system,sans-serif;
-    background:var(--bg-app);
+    background:radial-gradient(circle at 50% 0%, #e7e0d2 0%, var(--bg-page) 60%);
     color:var(--text-primary);
     padding:40px;
     display:flex;
@@ -38,7 +46,7 @@
     max-width:1400px;
     background:var(--bg-surface);
     border-radius:var(--radius-frame);
-    box-shadow:var(--shadow);
+    box-shadow:var(--shadow-app);
     overflow:hidden;
     border:1px solid var(--border-subtle);
   }
@@ -49,7 +57,8 @@
   .gallery-overlay.open{display:flex;}
   .gallery-box{
     max-width:1000px; width:100%; max-height:90vh; overflow-y:auto;
-    background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:20px; padding:24px;
+    background:var(--sheen), var(--bg-surface); border:1px solid var(--border-subtle); border-radius:20px; padding:24px;
+    box-shadow:var(--shadow-app);
   }
   .gallery-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;}
   .gallery-head h3{margin:0; font-size:16px; font-weight:600;}
@@ -77,7 +86,12 @@
     cursor:pointer; text-decoration:none; position:relative;
   }
   .nav-ic{font-size:15px; line-height:1;}
-  .nav-link.active{background:var(--accent-gold-soft); color:var(--accent-gold);}
+  .nav-link:hover{color:var(--text-primary); background:rgba(201,168,118,.08);}
+  .nav-link.active{
+    color:var(--accent-gold);
+    background:linear-gradient(145deg, rgba(201,168,118,.20), rgba(201,168,118,.08));
+    box-shadow:inset 0 0 0 1px var(--border-accent);
+  }
   .nav-link-soon{opacity:.45; cursor:not-allowed;}
   .soon-dot{position:absolute; top:6px; right:6px; width:6px; height:6px; border-radius:50%; background:var(--text-muted);}
   .user{display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit;}
@@ -100,8 +114,9 @@
 
   /* Hero card */
   .hero{
-    background:var(--bg-card);
+    background:var(--sheen), var(--bg-card);
     border:1px solid var(--border-subtle);
+    box-shadow:inset 0 1px 0 var(--border-hairline);
     border-radius:var(--radius-card);
     display:flex;
     overflow:hidden;
@@ -124,7 +139,7 @@
   .hero-image{
     flex:1.4; min-width:280px;
     background:
-      linear-gradient(100deg, rgba(28,24,21,.92) 0%, rgba(28,24,21,.35) 40%, rgba(28,24,21,0) 65%),
+      linear-gradient(100deg, rgba(28,24,21,.92) 0%, rgba(28,24,21,.35) 40%, rgba(28,24,21,0) 65%, rgba(28,24,21,.22) 100%),
       url('assets/hero.jpg') center/cover no-repeat;
     position:relative;
   }
@@ -145,11 +160,11 @@
     border-left:1px solid var(--border-subtle);
   }
   .ring-label{font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:.5px;}
-  .ring-link{font-size:12px; color:var(--accent-gold);}
 
   .panel{
-    background:var(--bg-card);
+    background:var(--sheen), var(--bg-card);
     border:1px solid var(--border-subtle);
+    box-shadow:inset 0 1px 0 var(--border-hairline);
     border-radius:var(--radius-card);
     padding:20px;
     margin-bottom:20px;
@@ -164,10 +179,14 @@
     display:flex; gap:10px;
   }
   .phase-card{
-    flex:1 1 0; min-width:0; background:var(--bg-app); border:1px solid var(--border-subtle);
-    border-radius:14px; padding:14px 10px; text-align:center;
+    flex:1 1 0; min-width:0; background:var(--sheen), var(--bg-app); border:1px solid var(--border-subtle);
+    border-radius:var(--radius-sm); padding:14px 10px; text-align:center;
   }
-  .phase-card.active{background:var(--accent-gold-soft); border-color:var(--accent-gold);}
+  .phase-card.active{
+    background:linear-gradient(145deg, rgba(201,168,118,.20), rgba(201,168,118,.08)), var(--bg-app);
+    border-color:var(--accent-gold);
+    box-shadow:inset 0 0 0 1px var(--border-accent);
+  }
   .phase-icon{
     width:32px;height:32px;border-radius:50%; background:var(--bg-card);
     display:flex;align-items:center;justify-content:center; margin:0 auto 8px; font-size:13px;
@@ -203,6 +222,35 @@
     text-shadow:0 1px 5px rgba(0,0,0,.7);
   }
 </style>
+<script>
+// Tokens de identidade visual compartilhados com o site de equipamentos —
+// fonte única em design-tokens.json (mesmo arquivo replicado nos dois
+// repositórios, porque são dois sites publicados separadamente no Netlify).
+// Se a busca falhar (arquivo aberto direto pelo navegador, ainda não
+// publicado etc.) os valores do :root acima continuam valendo — este bloco
+// só reforça/atualiza por cima, nunca é obrigatório para a página funcionar.
+(function(){
+  fetch('design-tokens.json', { cache: 'no-store' })
+    .then(res => { if(!res.ok) throw new Error('HTTP '+res.status); return res.json(); })
+    .then(t => {
+      const c = t.color || {}, r = t.radius || {}, s = t.shadow || {};
+      const map = {
+        '--bg-page': c.backgroundPage, '--bg-app': c.backgroundApp,
+        '--bg-surface': c.surface, '--bg-card': c.surfaceRaised, '--bg-card-hover': c.surfaceHover,
+        '--border-subtle': c.borderSubtle, '--border-hairline': c.borderHairline, '--border-accent': c.borderAccent,
+        '--accent-gold': c.accent, '--text-primary': c.textPrimary, '--text-secondary': c.textSecondary,
+        '--text-muted': c.textMuted, '--success': c.success, '--warning': c.warning, '--danger': c.danger,
+        '--radius-sm': r.small, '--radius-card': r.medium, '--radius-frame': r.large,
+        '--shadow': s.card, '--shadow-app': s.frame,
+      };
+      const css = ':root{' + Object.entries(map).filter(([,v])=>v).map(([k,v])=>`${k}:${v}`).join(';') + '}';
+      const style = document.createElement('style');
+      style.textContent = css;
+      document.head.appendChild(style);
+    })
+    .catch(() => { /* mantém a paleta padrão definida no :root acima */ });
+})();
+</script>
 </head>
 <body>
 <div class="frame">
