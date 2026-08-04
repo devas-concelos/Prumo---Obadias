@@ -1,6 +1,6 @@
 {
   "_readme": "Fonte única da identidade visual compartilhada entre o PRUMO e a Curadoria de Equipamentos (e páginas futuras do mesmo ecossistema). Editar valores aqui atualiza as duas páginas — não edite cores direto no <style> de cada index.html. Este arquivo é replicado (cópia idêntica) nos dois repositórios: 'Prumo - Obadias' e 'obadias-303', porque são dois sites publicados separadamente no Netlify e não podem compartilhar um arquivo físico entre domínios diferentes. Ao mudar um valor aqui, copie o arquivo inteiro para o outro repositório também.",
-  "updatedAt": "2026-08-02",
+  "updatedAt": "2026-08-03",
   "color": {
     "backgroundPage": "#ddd5c6",
     "backgroundApp": "#141210",
@@ -15,7 +15,7 @@
     "accentSoft": "#ddc49b",
     "textPrimary": "#f2ede4",
     "textSecondary": "#a69c8d",
-    "textMuted": "#6e6559",
+    "textMuted": "#8c8275",
     "success": "#8a9a73",
     "warning": "#d6b44a",
     "danger": "#c25b4a"

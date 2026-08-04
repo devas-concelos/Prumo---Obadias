@@ -20,7 +20,7 @@
     --accent-gold:#c9a876;
     --text-primary:#f2ede4;
     --text-secondary:#a69c8d;
-    --text-muted:#6e6559;
+    --text-muted:#8c8275;
     --success:#8a9a73;
     --warning:#d6b44a;
     --danger:#c25b4a;
@@ -92,8 +92,11 @@
     background:linear-gradient(145deg, rgba(201,168,118,.20), rgba(201,168,118,.08));
     box-shadow:inset 0 0 0 1px var(--border-accent);
   }
-  .nav-link-soon{opacity:.45; cursor:not-allowed;}
-  .soon-dot{position:absolute; top:6px; right:6px; width:6px; height:6px; border-radius:50%; background:var(--text-muted);}
+  .nav-link-soon{opacity:.7; cursor:not-allowed;}
+  .soon-tag{
+    margin-left:2px; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.05em;
+    color:var(--text-muted); background:rgba(255,255,255,.05); padding:2px 7px; border-radius:20px; white-space:nowrap;
+  }
   .user{display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit;}
   .avatar{
     width:36px;height:36px;border-radius:50%;
@@ -144,8 +147,12 @@
     position:relative;
   }
   .credit{font-size:11px; color:var(--text-muted); margin-top:4px;}
-  .eq-row{display:flex; align-items:center; gap:12px; padding:11px 0; border-bottom:1px solid var(--border-subtle); font-size:12.5px;}
+  .eq-row{display:flex; align-items:center; gap:12px; padding:11px 0; border-bottom:1px solid var(--border-subtle); font-size:12.5px; text-decoration:none; color:inherit; cursor:pointer; border-radius:8px; transition:background-color .15s ease;}
   .eq-row:last-child{border-bottom:none;}
+  .eq-row:hover{background:rgba(201,168,118,.07);}
+  .eq-row:hover .eq-cat{color:var(--text-secondary);}
+  .eq-go{flex-shrink:0; width:0; overflow:hidden; color:var(--text-muted); font-size:12px; opacity:0; transition:opacity .15s ease, width .15s ease, margin .15s ease;}
+  .eq-row:hover .eq-go{opacity:1; width:10px; margin-left:2px;}
   .eq-cat{width:130px; flex-shrink:0; color:var(--text-muted); font-size:11px; text-transform:uppercase; letter-spacing:.4px;}
   .eq-name{flex:1; min-width:0;}
   .eq-name b{display:block; font-size:12.5px;}
@@ -201,6 +208,8 @@
   .dot.high{background:var(--danger);}
   .dot.mid{background:var(--warning);}
   .dot.low{background:var(--success);}
+  .dot.loading{background:var(--text-muted); animation:dot-pulse 1.2s ease-in-out infinite;}
+  @keyframes dot-pulse{0%,100%{opacity:.35;}50%{opacity:1;}}
 
   /* Slideshow de renders */
   .slideshow{display:flex; align-items:center; justify-content:center; gap:16px; padding:6px 0 2px;}
@@ -221,6 +230,13 @@
     font-size:11px; font-weight:600; color:var(--text-primary);
     text-shadow:0 1px 5px rgba(0,0,0,.7);
   }
+  .slide-dots{display:flex; align-items:center; justify-content:center; gap:8px; margin-top:14px;}
+  .slide-dot{
+    width:7px; height:7px; padding:0; border:0; border-radius:50%;
+    background:#4a4030; cursor:pointer; transition:.2s ease;
+  }
+  .slide-dot:hover{background:var(--text-secondary);}
+  .slide-dot.active{width:18px; border-radius:4px; background:var(--accent-gold);}
 </style>
 <script>
 // Tokens de identidade visual compartilhados com o site de equipamentos —
@@ -262,12 +278,12 @@
           <div class="nav-link active" title="Galeria de imagens renderizadas" onclick="document.getElementById('galleryOverlay').classList.add('open')">
             <span class="nav-ic">🖼</span><span>Galeria</span>
           </div>
-          <a class="nav-link" title="Seleção de equipamentos" href="https://prumo-listadecompras.netlify.app/" target="_blank" rel="noopener">
+          <a class="nav-link" title="Seleção de equipamentos" href="https://prumo-listadecompras.netlify.app/">
             <span class="nav-ic">🛒</span><span>Equipamentos</span>
           </a>
           <div class="nav-link nav-link-soon" title="Detalhamentos e quantitativos — em breve">
             <span class="nav-ic">📁</span><span>Detalhamentos</span>
-            <span class="soon-dot"></span>
+            <span class="soon-tag">em breve</span>
           </div>
         </nav>
       </div>
@@ -319,50 +335,58 @@
 
     <div class="panel">
       <div class="panel-head"><h3>Equipamentos em decisão</h3></div>
-      <div class="eq-row" data-category="Cooktop">
+      <a class="eq-row" data-category="Cooktop" href="https://prumo-listadecompras.netlify.app/#Cooktop" aria-label="Ver Cooktop na Curadoria de Equipamentos">
         <div class="eq-cat">Cooktop</div>
         <div class="eq-name"><span class="eq-waiting">Aguardando decisão</span></div>
         <span class="badge"><span class="dot mid"></span>Em análise</span>
-      </div>
-      <div class="eq-row" data-category="Coifa">
+        <span class="eq-go" aria-hidden="true">→</span>
+      </a>
+      <a class="eq-row" data-category="Coifa" href="https://prumo-listadecompras.netlify.app/#Coifa" aria-label="Ver Coifa na Curadoria de Equipamentos">
         <div class="eq-cat">Coifa</div>
         <div class="eq-name"><span class="eq-waiting">Aguardando decisão</span></div>
         <span class="badge"><span class="dot mid"></span>Em análise</span>
-      </div>
-      <div class="eq-row" data-category="Microondas">
+        <span class="eq-go" aria-hidden="true">→</span>
+      </a>
+      <a class="eq-row" data-category="Microondas" href="https://prumo-listadecompras.netlify.app/#Microondas" aria-label="Ver Micro-ondas na Curadoria de Equipamentos">
         <div class="eq-cat">Micro-ondas</div>
         <div class="eq-name"><span class="eq-waiting">Aguardando decisão</span></div>
         <span class="badge"><span class="dot mid"></span>Em análise</span>
-      </div>
-      <div class="eq-row" data-category="ACSala">
+        <span class="eq-go" aria-hidden="true">→</span>
+      </a>
+      <a class="eq-row" data-category="ACSala" href="https://prumo-listadecompras.netlify.app/#ACSala" aria-label="Ver Ar-condicionado da Sala na Curadoria de Equipamentos">
         <div class="eq-cat">Ar-cond. Sala</div>
         <div class="eq-name"><span class="eq-waiting">Aguardando decisão</span></div>
         <span class="badge"><span class="dot mid"></span>Em análise</span>
-      </div>
-      <div class="eq-row" data-category="ACQuartos">
+        <span class="eq-go" aria-hidden="true">→</span>
+      </a>
+      <a class="eq-row" data-category="ACQuartos" href="https://prumo-listadecompras.netlify.app/#ACQuartos" aria-label="Ver Ar-condicionado dos Quartos na Curadoria de Equipamentos">
         <div class="eq-cat">Ar-cond. Quartos</div>
         <div class="eq-name"><span class="eq-waiting">Aguardando decisão</span></div>
         <span class="badge"><span class="dot mid"></span>Em análise</span>
-      </div>
-      <div class="eq-row" data-category="TVSala">
+        <span class="eq-go" aria-hidden="true">→</span>
+      </a>
+      <a class="eq-row" data-category="TVSala" href="https://prumo-listadecompras.netlify.app/#TVSala" aria-label="Ver TV da Sala na Curadoria de Equipamentos">
         <div class="eq-cat">TV Sala</div>
         <div class="eq-name"><span class="eq-waiting">Aguardando decisão</span></div>
         <span class="badge"><span class="dot mid"></span>Em análise</span>
-      </div>
-      <div class="eq-row" data-category="TVQuarto">
+        <span class="eq-go" aria-hidden="true">→</span>
+      </a>
+      <a class="eq-row" data-category="TVQuarto" href="https://prumo-listadecompras.netlify.app/#TVQuarto" aria-label="Ver TV do Quarto na Curadoria de Equipamentos">
         <div class="eq-cat">TV Quarto</div>
         <div class="eq-name"><span class="eq-waiting">Aguardando decisão</span></div>
         <span class="badge"><span class="dot mid"></span>Em análise</span>
-      </div>
+        <span class="eq-go" aria-hidden="true">→</span>
+      </a>
     </div>
 
     <div class="panel" style="margin-bottom:0;">
       <div class="panel-head"><h3>Renders do projeto</h3></div>
-      <div class="slideshow">
+      <div class="slideshow" id="slideshow">
         <div class="slide" id="slideLeft"><img src="" alt=""><span class="slide-caption"></span></div>
         <div class="slide center" id="slideCenter"><img src="" alt=""><span class="slide-caption"></span></div>
         <div class="slide" id="slideRight"><img src="" alt=""><span class="slide-caption"></span></div>
       </div>
+      <div class="slide-dots" id="slideDots" role="tablist" aria-label="Selecionar render"></div>
     </div>
   </div>
 </div>
@@ -394,12 +418,29 @@
 (function(){
   const EQUIPAMENTOS_STATUS_URL = 'https://prumo-listadecompras.netlify.app/.netlify/functions/status';
 
+  // Enquanto a busca não responde, o card mostra "Verificando…" (ponto pulsante) —
+  // um estado visualmente diferente de "Aguardando decisão", que só aparece depois
+  // que a busca terminou e confirmou que não há decisão registrada para a categoria.
+  function setChecking(row){
+    const badgeEl = row.querySelector('.badge');
+    if(badgeEl) badgeEl.innerHTML = '<span class="dot loading"></span>Verificando…';
+  }
+  function setWaiting(row){
+    const nameEl = row.querySelector('.eq-name');
+    const badgeEl = row.querySelector('.badge');
+    if(nameEl) nameEl.innerHTML = '<span class="eq-waiting">Aguardando decisão</span>';
+    if(badgeEl) badgeEl.innerHTML = '<span class="dot mid"></span>Em análise';
+  }
+
+  const rows = document.querySelectorAll('.eq-row[data-category]');
+  rows.forEach(setChecking);
+
   fetch(EQUIPAMENTOS_STATUS_URL, { cache: 'no-store' })
     .then(res => { if(!res.ok) throw new Error('HTTP '+res.status); return res.json(); })
     .then(statusByCategory => {
-      document.querySelectorAll('.eq-row[data-category]').forEach(row => {
+      rows.forEach(row => {
         const info = statusByCategory[row.dataset.category];
-        if(!info) return; // sem evento ainda para essa categoria — mantém "Aguardando decisão"
+        if(!info){ setWaiting(row); return; } // busca concluída, sem decisão registrada ainda
 
         const nameEl = row.querySelector('.eq-name');
         const badgeEl = row.querySelector('.badge');
@@ -410,10 +451,15 @@
         } else if(info.status === 'cancelado'){
           nameEl.innerHTML = `<span class="eq-cancelled">Cliente optou por não adquirir</span>`;
           badgeEl.innerHTML = '<span class="dot high"></span>Cancelado';
+        } else {
+          setWaiting(row);
         }
       });
     })
-    .catch(() => { /* site de equipamentos ainda não está no ar — mantém o estado padrão */ });
+    .catch(() => {
+      // site de equipamentos ainda não está no ar, ou a busca falhou — volta ao estado padrão
+      rows.forEach(setWaiting);
+    });
 })();
 
 // Slideshow de renders — 3 imagens fixas (esquerda, centro, direita). A do
@@ -429,11 +475,15 @@
     {src:'assets/room_bwc_social.jpg', alt:'BWC Social', caption:'BWC Social'},
   ];
   let current = 0;
+  let timer = null;
   const els = {
     left: document.getElementById('slideLeft'),
     center: document.getElementById('slideCenter'),
     right: document.getElementById('slideRight'),
   };
+  const wrap = document.getElementById('slideshow');
+  const dotsWrap = document.getElementById('slideDots');
+
   function fill(el, item){
     el.querySelector('img').src = item.src;
     el.querySelector('img').alt = item.alt;
@@ -444,12 +494,57 @@
     fill(els.left, renders[(current - 1 + n) % n]);
     fill(els.center, renders[current]);
     fill(els.right, renders[(current + 1) % n]);
+    updateDots();
   }
-  render();
-  setInterval(() => {
-    current = (current + 1) % renders.length;
+  function renderDots(){
+    if(!dotsWrap) return;
+    dotsWrap.innerHTML = renders.map((item, i) =>
+      `<button class="slide-dot${i===current?' active':''}" type="button" role="tab" aria-selected="${i===current}" aria-label="Ver ${item.alt}" data-index="${i}"></button>`
+    ).join('');
+  }
+  function updateDots(){
+    if(!dotsWrap) return;
+    [...dotsWrap.children].forEach((dot, i) => {
+      dot.classList.toggle('active', i === current);
+      dot.setAttribute('aria-selected', i === current);
+    });
+  }
+  function goTo(index){
+    current = ((index % renders.length) + renders.length) % renders.length;
     render();
-  }, 4500);
+    restartAutoplay();
+  }
+  function startAutoplay(){
+    stopAutoplay();
+    timer = setInterval(() => { current = (current + 1) % renders.length; render(); }, 4500);
+  }
+  function stopAutoplay(){
+    if(timer){ clearInterval(timer); timer = null; }
+  }
+  function restartAutoplay(){
+    startAutoplay();
+  }
+
+  renderDots();
+  render();
+  startAutoplay();
+
+  // Pausa quando o cliente quer olhar com calma: hover do mouse ou toque na tela.
+  if(wrap){
+    wrap.addEventListener('pointerenter', e => { if(e.pointerType === 'mouse') stopAutoplay(); });
+    wrap.addEventListener('pointerleave', e => { if(e.pointerType === 'mouse') startAutoplay(); });
+    wrap.addEventListener('touchstart', () => stopAutoplay(), {passive:true});
+    wrap.addEventListener('touchend', () => { stopAutoplay(); setTimeout(startAutoplay, 3000); }, {passive:true});
+  }
+  if(dotsWrap){
+    dotsWrap.addEventListener('click', e => {
+      const btn = e.target.closest('.slide-dot');
+      if(!btn) return;
+      goTo(Number(btn.dataset.index));
+    });
+    dotsWrap.addEventListener('pointerenter', e => { if(e.pointerType === 'mouse') stopAutoplay(); });
+    dotsWrap.addEventListener('pointerleave', e => { if(e.pointerType === 'mouse') startAutoplay(); });
+  }
 })();
 </script>
 </body>
