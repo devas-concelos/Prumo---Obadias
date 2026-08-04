@@ -2,6 +2,10 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<!-- Garante que os caminhos relativos (assets/, design-tokens.json) continuem
+     resolvendo certo mesmo quando a página é servida em /obadias303 via
+     rewrite do Netlify, sem mudar nada no acesso pela raiz do site. -->
+<base href="/">
 <title>PRUMO — Obadias 303</title>
 <style>
   :root{
@@ -230,6 +234,34 @@
     font-size:11px; font-weight:600; color:var(--text-primary);
     text-shadow:0 1px 5px rgba(0,0,0,.7);
   }
+  body.is-locked .frame{display:none}
+  .access-gate{
+    display:none; position:fixed; inset:0; z-index:300; align-items:center; justify-content:center; padding:20px;
+    background:radial-gradient(circle at 50% 0%, #e7e0d2 0%, var(--bg-page) 60%);
+  }
+  body.is-locked .access-gate{display:flex}
+  .access-card{
+    width:100%; max-width:380px; background:var(--bg-app); border:1px solid var(--border-subtle);
+    border-radius:28px; box-shadow:var(--shadow-app); padding:44px 36px; text-align:center;
+  }
+  .access-logo{
+    font-family:Georgia,'Times New Roman',serif; letter-spacing:3px; font-size:14px; color:var(--accent-gold);
+    text-transform:uppercase; margin-bottom:24px;
+  }
+  .access-card h1{margin:0 0 8px; font-size:18px; font-weight:600;}
+  .access-card p{margin:0 0 24px; color:var(--text-secondary); font-size:13px; line-height:1.6;}
+  .access-input{
+    width:100%; min-height:46px; padding:0 16px; margin-bottom:12px; border:1px solid var(--border-subtle);
+    border-radius:12px; background:var(--bg-card); color:var(--text-primary); font-size:14px;
+    text-align:center; letter-spacing:.02em; box-sizing:border-box;
+  }
+  .access-input:focus{outline:none; border-color:var(--accent-gold);}
+  .access-submit{
+    width:100%; min-height:46px; border:none; border-radius:12px; background:var(--accent-gold);
+    color:#241f19; font-size:13px; font-weight:600; cursor:pointer;
+  }
+  .access-submit:hover{opacity:.9;}
+  .access-error{min-height:16px; margin:12px 0 0; color:var(--danger); font-size:12px;}
   .slide-dots{display:flex; align-items:center; justify-content:center; gap:8px; margin-top:14px;}
   .slide-dot{
     width:7px; height:7px; padding:0; border:0; border-radius:50%;
@@ -268,7 +300,33 @@
 })();
 </script>
 </head>
-<body>
+<body class="is-locked">
+<script>
+// Acesso ao projeto — tela de bloqueio simples (não é uma autenticação de servidor,
+// é uma camada de reasseguramento para o cliente; o código não deve ser tratado
+// como segredo forte, já que roda inteiramente no navegador). Se já foi liberado
+// antes neste navegador, remove a classe "is-locked" já aqui, antes da 1ª pintura,
+// pra não piscar a tela de senha.
+(function(){
+  try{
+    if(localStorage.getItem('prumo-access-granted') === 'true'){
+      document.body.classList.remove('is-locked');
+    }
+  }catch(e){}
+})();
+</script>
+<div class="access-gate" id="accessGate">
+  <div class="access-card">
+    <div class="access-logo">PRUMO</div>
+    <h1>Acesso ao projeto</h1>
+    <p>Digite o código de acesso combinado com o arquiteto para entrar no painel do projeto Obadias 303.</p>
+    <form autocomplete="off" id="accessForm">
+      <input aria-label="Código de acesso" autocomplete="off" class="access-input" id="accessInput" placeholder="Código de acesso" type="password"/>
+      <button class="access-submit" type="submit">Entrar</button>
+      <p class="access-error" id="accessError"></p>
+    </form>
+  </div>
+</div>
 <div class="frame">
   <div class="main">
     <div class="topbar">
@@ -409,6 +467,35 @@
   </div>
 </div>
 
+<script>
+// Tela de acesso do projeto — libera o painel ao digitar o código combinado
+// com o cliente. Guarda a liberação em localStorage pra não pedir de novo no
+// mesmo navegador. Lembrete: isso roda 100% no cliente, não é uma autenticação
+// de servidor — serve pra reasseguramento, não pra proteção forte de dados.
+(function(){
+  const ACCESS_KEY = 'prumo-access-granted';
+  const EXPECTED = 'obadias303';
+  function normalize(value){ return String(value||'').trim().toLowerCase(); }
+
+  const form = document.getElementById('accessForm');
+  const input = document.getElementById('accessInput');
+  const error = document.getElementById('accessError');
+  if(!form || !input) return;
+
+  form.addEventListener('submit', function(event){
+    event.preventDefault();
+    if(normalize(input.value) === EXPECTED){
+      try{ localStorage.setItem(ACCESS_KEY, 'true'); }catch(e){}
+      document.body.classList.remove('is-locked');
+      if(error) error.textContent = '';
+    }else{
+      if(error) error.textContent = 'Código incorreto. Tente novamente.';
+      input.value = '';
+      input.focus();
+    }
+  });
+})();
+</script>
 <script>
 // Busca o status real dos equipamentos no site de curadoria (endpoint público
 // /.netlify/functions/status). Troque a URL abaixo pelo domínio do site de

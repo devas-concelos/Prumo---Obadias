@@ -1,0 +1,7 @@
+# PRUMO é a plataforma; cada projeto de cliente ganha seu próprio caminho.
+# /obadias303 serve o mesmo conteúdo da raiz, mas mantém essa URL na barra
+# de endereço (rewrite, não redirect) — assim o link identifica plataforma
+# + projeto quando compartilhado com o cliente. A raiz continua funcionando
+# normalmente também.
+/obadias303       /index.html   200
+/obadias303/      /index.html   200
